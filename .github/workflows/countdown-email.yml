@@ -9,6 +9,7 @@ jobs:
   send-email:
     name: Send Distortion countdown email
     runs-on: ubuntu-latest
+    environment: github-pages
 
     steps:
       - name: Checkout repository
