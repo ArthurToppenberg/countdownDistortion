@@ -3,6 +3,7 @@ import CarouselCounter from "./carouselCounter";
 import ScrollIndicator from "./components/ScrollIndicator";
 import CountdownTimer from "./countdownTimer";
 import DrinkCounter from "./drinkCounter";
+import { assetPath } from "./lib/assetPath";
 import ListenCounter from "./listenCounter";
 import OysterCounter from "./oysterCounter";
 
@@ -11,7 +12,7 @@ export default function Home() {
     <div className="relative">
       <div className="fixed inset-0 z-0">
         <img
-          src="/optimized/IMG_1864.avif"
+          src={assetPath("/optimized/IMG_1864.avif")}
           alt=""
           className="size-full object-cover object-center"
         />
