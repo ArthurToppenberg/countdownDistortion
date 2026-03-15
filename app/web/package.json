@@ -7,9 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "clean": "rimraf node_modules .next .turbo out"
+    "clean": "rimraf node_modules .next .turbo out",
+    "convert-heic": "node scripts/convertHeicToPng.mjs",
+    "optimize-media": "node scripts/optimizeMedia.mjs",
+    "generate-blur-placeholders": "node scripts/generateBlurPlaceholders.mjs",
+    "generate": "pnpm run optimize-media && pnpm run generate-blur-placeholders",
+    "prebuild": "pnpm run generate"
   },
   "dependencies": {
+    "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -21,8 +27,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "rimraf": "^6.0.1",
+    "sharp": "^0.33.5",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "rimraf": "^6.0.1"
+    "typescript": "^5.9.3"
   }
 }
