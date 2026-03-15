@@ -1,6 +1,8 @@
 name: Send Countdown Email
 
 on:
+  schedule:
+    - cron: "0 4 * * *" # 6:00 in Copenhagen
   push:
     branches:
       - main
