@@ -77,34 +77,34 @@ async function main(): Promise<void> {
       ? "Distortion er i dag!"
       : `${daysLeft} ${dayWord} til Distortion`;
 
+  const delay = (ms: number): Promise<void> =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
   const typedRecipients: Recipient[] = recipients;
-  const results = await Promise.allSettled(
-    typedRecipients.map(async (recipient) => {
-      const { error } = await resend.emails.send({
-        from: FROM_ADDRESS,
-        to: recipient.email,
-        subject,
-        text: buildText(daysLeft, recipient.name),
-        html: buildHtml(daysLeft, recipient.name),
-      });
+  const failures: string[] = [];
 
-      if (error) {
-        throw new Error(`Failed to send to ${recipient.email}: ${error.message}`);
-      }
+  for (const [index, recipient] of typedRecipients.entries()) {
+    if (index > 0) {
+      await delay(5000);
+    }
 
-      return recipient.email;
-    })
-  );
+    const { error } = await resend.emails.send({
+      from: FROM_ADDRESS,
+      to: recipient.email,
+      subject,
+      text: buildText(daysLeft, recipient.name),
+      html: buildHtml(daysLeft, recipient.name),
+    });
 
-  for (const result of results) {
-    if (result.status === "fulfilled") {
-      console.info(`Email » Sent to ${result.value} (${daysLeft} days left)`);
+    if (error) {
+      const message = `Failed to send to ${recipient.email}: ${error.message}`;
+      console.error(`Email » Error: ${message}`);
+      failures.push(message);
     } else {
-      console.error(`Email » ${result.reason}`);
+      console.info(`Email » Sent to ${recipient.email} (${daysLeft} days left)`);
     }
   }
 
-  const failures = results.filter((r) => r.status === "rejected");
   if (failures.length > 0) {
     process.exit(1);
   }
