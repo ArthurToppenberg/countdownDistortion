@@ -2,7 +2,7 @@ import { Resend } from "resend";
 import config from "../../app/web/app/config.json";
 import recipients from "./recipients.json";
 
-const FROM_ADDRESS = "Distortion Countdown <onboarding@resend.dev>";
+const FROM_ADDRESS = "Distortion Countdown <countdown@distortion.arthurtoppenberg.dk>";
 
 interface Recipient {
   name: string;
