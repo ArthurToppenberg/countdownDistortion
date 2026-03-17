@@ -17,12 +17,17 @@ function getDaysLeft(): number {
   return Math.max(0, Math.ceil((target - now) / (1000 * 60 * 60 * 24)));
 }
 
-function getFunFact(daysLeft: number): string {
+function getRandomFunFact(): string {
   const typedFunFacts: string[] = funFacts;
-  return typedFunFacts[daysLeft % typedFunFacts.length];
+  const index = Math.floor(Math.random() * typedFunFacts.length);
+  return typedFunFacts[index];
 }
 
-function buildText(daysLeft: number, recipientName: string): string {
+function buildText(
+  daysLeft: number,
+  recipientName: string,
+  funFact: string,
+): string {
   const year = new Date(config.countdown).getFullYear();
 
   if (daysLeft === 0) {
@@ -30,7 +35,6 @@ function buildText(daysLeft: number, recipientName: string): string {
   }
 
   const dayWord = daysLeft === 1 ? "dag" : "dage";
-  const funFact = getFunFact(daysLeft);
   return [
     "COUNTDOWN TO DISTORTION",
     "",
@@ -63,7 +67,11 @@ function darkModeStyles(): string {
     </style>`;
 }
 
-function buildHtml(daysLeft: number, recipientName: string): string {
+function buildHtml(
+  daysLeft: number,
+  recipientName: string,
+  funFact: string,
+): string {
   const year = new Date(config.countdown).getFullYear();
 
   if (daysLeft === 0) {
@@ -89,7 +97,6 @@ function buildHtml(daysLeft: number, recipientName: string): string {
   }
 
   const dayWord = daysLeft === 1 ? "dag" : "dage";
-  const funFact = getFunFact(daysLeft);
   return `<!DOCTYPE html>
 <html lang="da">
 <head>
@@ -144,12 +151,14 @@ async function main(): Promise<void> {
       await delay(5000);
     }
 
+    const funFact = getRandomFunFact();
+
     const { error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to: recipient.email,
       subject,
-      text: buildText(daysLeft, recipient.name),
-      html: buildHtml(daysLeft, recipient.name),
+      text: buildText(daysLeft, recipient.name, funFact),
+      html: buildHtml(daysLeft, recipient.name, funFact),
     });
 
     if (error) {
